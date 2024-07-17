@@ -20,3 +20,13 @@ COPY *.go ./
 
 ENV CGO_ENABLED=1
 RUN xx-go build -tags musl -ldflags '-s -w' -o /build/message-sender
+
+FROM alpine
+
+WORKDIR /app
+
+COPY --from=build /build/message-sender .
+
+EXPOSE 8080
+
+ENTRYPOINT ["/app/message-sender"]
