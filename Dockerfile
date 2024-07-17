@@ -15,7 +15,7 @@ ENV CGO_ENABLED=1
 ENV GOOS=${TARGETOS}
 ENV GOARCH=${TARGETARCH}
 
-RUN if [ "${GOARCH}" = "amd64" ]; then CC=gcc go build -tags musl -ldflags '-s -w' -o /build/message-sender; else CC=aarch64-alpine-linux-musl-gcc go build -tags musl -ldflags '-s -w' -o /build/message-sender; if
+RUN if [ "${GOARCH}" = "amd64" ]; then CC=gcc go build -tags musl -ldflags '-s -w' -o /build/message-sender else CC=aarch64-alpine-linux-musl-gcc go build -tags musl -ldflags '-s -w' -o /build/message-sender if
 
 FROM alpine
 
