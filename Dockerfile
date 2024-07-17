@@ -4,6 +4,7 @@ ARG TARGETARCH
 
 # RUN apk add --no-progress --no-cache gcc musl-dev
 # RUN apk add --upgrade --no-cache ca-certificates && update-ca-certificates
+RUN apk update && apk --no-cache --update add build-base
 
 WORKDIR /build
 
