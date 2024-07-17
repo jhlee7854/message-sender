@@ -1,6 +1,6 @@
 FROM --platform=$BUILDPLATFORM golang:alpine AS build
 
-RUN apk add --no-progress --no-cache gcc musl-dev
+RUN apk add --no-progress --no-cache gcc gcc-aarch64 musl-dev
 
 RUN ls -al /usr/bin
 
