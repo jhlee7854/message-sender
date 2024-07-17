@@ -12,7 +12,7 @@ COPY go.mod go.sum ./
 RUN go mod download
 COPY *.go ./
 
-RUN if [[ "${TARGETARCH}" -eq "amd64" ]]; then CGO_ENABLED=1 GOOS=${TARGETOS} GOARCH=${TARGETARCH} go build -ldflags '-s -w' -o /build/message-sender; else CGO_ENABLED=1 GOOS=${TARGETOS} GOARCH=${TARGETARCH} CC=/usr/bin/aarch64-alpine-linux-musl-gcc go build -ldflags '-s -w' -o /build/message-sender; fi
+RUN if [[ "${TARGETARCH}" -eq "amd64" ]]; then CGO_ENABLED=1 GOOS=${TARGETOS} GOARCH=${TARGETARCH} go build -ldflags '-s -w' -o /build/message-sender; else CGO_ENABLED=1 GOOS=${TARGETOS} GOARCH=${TARGETARCH} CC=aarch64-alpine-linux-musl-gcc go build -ldflags '-s -w' -o /build/message-sender; fi
 # RUN GOOS=${TARGETOS} GOARCH=${TARGETARCH} go build -tags musl -ldflags '-extldflags "-static"' -o /build/message-sender
 
 FROM alpine
