@@ -1,9 +1,6 @@
-FROM --platform=$BUILDPLATFORM tonistiigi/xx AS xx
-
 FROM --platform=$BUILDPLATFORM golang:alpine AS build
 
-RUN apk add clang lld
-COPY --from=xx / /
+RUN apk add clang
 
 WORKDIR /build
 
@@ -11,12 +8,10 @@ COPY go.mod go.sum ./
 RUN go mod download
 COPY *.go ./
 
-ARG TARGETPLATFORM
-RUN xx-apk add musl-dev gcc
-ENV CGO_ENABLED=1
+ARG TARGETOS
+ARG TARGETARCH
 
-RUN xx-go build -o /build/message-sender && \
-    xx-verify /build/message-sender
+RUN CGO_ENABLED=1 GOOS=${TARGETOS} GOARCH=${TARGETARCH} CC=clang go build -ldflags '-s -w' -o /build/message-sender
 
 FROM alpine
 
