@@ -1,8 +1,11 @@
+FROM --platform=$BUILDPLATFORM tonistiigi/xx AS xx
+
 FROM --platform=$BUILDPLATFORM golang:alpine AS build
 
-WORKDIR /build
-
 RUN apk add clang lld
+COPY --from=xx / /
+
+WORKDIR /build
 
 COPY go.mod go.sum ./
 RUN go mod download
