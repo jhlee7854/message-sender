@@ -11,7 +11,7 @@ COPY *.go ./
 ARG TARGETOS
 ARG TARGETARCH
 
-RUN CGO_ENABLED=1 GOOS=${TARGETOS} GOARCH=${TARGETARCH} CC=gcc go build -ldflags '-s -w' -o /build/message-sender
+RUN CGO_ENABLED=1 GOOS=${TARGETOS} GOARCH=${TARGETARCH} CC=gcc go build -tags musl -ldflags '-s -w' -o /build/message-sender
 
 FROM alpine
 
