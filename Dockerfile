@@ -5,6 +5,9 @@ ARG TARGETARCH
 RUN apk add --no-progress --no-cache gcc musl-dev
 # RUN apk add --upgrade --no-cache ca-certificates && update-ca-certificates
 
+WORKDIR /
+RUN find -name 'aarch64-alpine-linux-musl-gcc'
+
 WORKDIR /build
 
 COPY go.mod go.sum ./
