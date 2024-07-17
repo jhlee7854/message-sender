@@ -1,6 +1,6 @@
 FROM --platform=$BUILDPLATFORM golang:alpine AS build
 
-RUN apk add --no-progress --no-cache gcc gcc-aarch64 musl-dev
+RUN apk add --no-progress --no-cache gcc gcc-arm-none-eabi musl-dev
 
 RUN ls -al /usr/bin
 
@@ -17,7 +17,7 @@ ENV CGO_ENABLED=1
 ENV GOOS=${TARGETOS}
 ENV GOARCH=${TARGETARCH}
 
-RUN if [ "${GOARCH}" = "amd64" ]; then CC=gcc go build -tags musl -ldflags '-s -w' -o /build/message-sender; else CC=aarch64-alpine-linux-musl-gcc go build -tags musl -ldflags '-s -w' -o /build/message-sender; fi
+RUN if [ "${GOARCH}" = "amd64" ]; then CC=gcc go build -tags musl -ldflags '-s -w' -o /build/message-sender; else CC=arm-none-eabi-gcc go build -tags musl -ldflags '-s -w' -o /build/message-sender; fi
 
 FROM alpine
 
