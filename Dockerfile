@@ -1,29 +1,15 @@
+FROM --platform=$BUILDPLATFORM tonistiigi/xx AS xx
+
 FROM --platform=$BUILDPLATFORM golang:alpine AS build
 
-WORKDIR /build
+RUN apk add clang lld
 
-COPY go.mod go.sum ./
-RUN go mod download
-COPY *.go ./
+COPY --from=xx / /
 
-ARG TARGETOS
-ARG TARGETARCH
+ARG TARGETPLATFORM
 
+RUN xx-info env
+
+RUN xx-apk add musl-dev gcc
 ENV CGO_ENABLED=1
-ENV GOOS=${TARGETOS}
-ENV GOARCH=${TARGETARCH}
-
-RUN apk add --no-progress --no-cache clang musl-dev
-RUN ls -al /usr/bin
-
-RUN if [ "${GOARCH}" = "amd64" ]; then CC=clang go build -tags musl -ldflags '-s -w' -o /build/message-sender; else CC=aarch64-alpine-linux-musl go build -tags musl -ldflags '-s -w' -o /build/message-sender; fi
-
-FROM alpine
-
-WORKDIR /app
-
-COPY --from=build /build/message-sender .
-
-EXPOSE 8080
-
-ENTRYPOINT ["/app/message-sender"]
+RUN xx-go build -tags musl -ldflags '-s -w' -o /build/message-sender
