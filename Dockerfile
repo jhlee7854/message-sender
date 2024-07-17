@@ -2,9 +2,8 @@ FROM --platform=$BUILDPLATFORM golang:alpine AS build
 ARG TARGETOS
 ARG TARGETARCH
 
-# RUN apk add --no-progress --no-cache gcc musl-dev
+RUN apk add --no-progress --no-cache gcc musl-dev
 # RUN apk add --upgrade --no-cache ca-certificates && update-ca-certificates
-RUN apk update && apk --no-cache --update add gcc
 
 WORKDIR /build
 
